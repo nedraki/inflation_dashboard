@@ -35,6 +35,7 @@ if bitcoin_market == ["Global trade"]:
     
     try:
         st.info("Traking volume of BTC traded globally")
+
         world_map_volume_btc = df_market_mapping[["country","currency_code","volume_btc"]]
         st.write(geo_scatter(world_map_volume_btc))
 

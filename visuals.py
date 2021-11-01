@@ -1,7 +1,8 @@
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
-from streamlit.secrets import Secrets
+import streamlit as st
+# from streamlit.secrets import Secrets
 
 ## Country selection:
 def plot_big_mac(df, country_selected):
@@ -72,7 +73,7 @@ def update_layout(fig, title, x_axis, y_axis, legend):
     yaxis_title=y_axis,
     legend_title=legend)
 
-
+@st.cache()
 def geo_scatter(df):
 
     df = df[["country","volume_btc"]]
@@ -87,7 +88,7 @@ def geo_scatter(df):
 
     return fig
 
-
+@st.cache()
 def world_map(df, average = False):
 
     if average == False:

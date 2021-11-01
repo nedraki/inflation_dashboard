@@ -1,6 +1,7 @@
 import os
 import numpy as np
 import pandas as pd
+import streamlit as st
 from visuals import map_country
 
 """Datasets of interest:
@@ -21,13 +22,11 @@ df_big_mac = pd.read_csv(path_to_big_mac)
 df_big_mac["date"] = pd.to_datetime(df_big_mac.date)
 df_big_mac = df_big_mac.sort_values(by="date", axis=0)
 
-
 df_market = pd.read_sql('currencies_vs_btc', path_to_currencies)
 df_country = pd.read_csv(path_to_country)
 
 
 ## Merge market data with countries dataset 
-
 df_market_mapping = pd.merge(df_market, df_country, on = 'currency_code', how = 'inner')
 df_market_mapping.dropna(inplace=True)
 
