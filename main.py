@@ -21,17 +21,37 @@ st.title('Inflation detective :sleuth_or_spy:')
 country_selection = st.sidebar.multiselect('Country of interest', 
             options= df_market_mapping.country.unique())
 
+bitcoin_market = st.sidebar.multiselect('Trading of currencies for Bitcoins', options=["Global trade"])
+
 ### Columns for layout:
 
 # column_1, column_2, column_3 = st.columns(3)
 column_1, column_2 = st.columns(2)
 
-# World maps:
+
+### Global map Volume BTC
+
+if bitcoin_market == ["Global trade"]:
+    
+    try:
+        st.info("Traking volume of BTC traded globally")
+        world_map_volume_btc = df_market_mapping[["country","currency_code","volume_btc"]]
+        st.write(geo_scatter(world_map_volume_btc))
+
+        ## Biggest traders by country:
+        top_variation_volume = top_variation_value(50, "volume_btc")
+
+        st.info("Countries moving highest volume on a day:")
+        st.table(top_variation_volume)
+
+    except:
+        print('Error ploting Volume BTC map')
+
+# World map exchange rate:
 if len(country_selection) == 0:
 
     
     world_map_inflation = world_map(df_market_mapping[["country","currency_code", "pct"]])
-    world_map_volume_btc = df_market_mapping[["country","currency_code","volume_btc"]]
     
     st.info("Percentual variation on exchange rate by country")
     st.write(world_map_inflation)
@@ -39,10 +59,6 @@ if len(country_selection) == 0:
     st.info("Countries with highest variation on exchange rate:")
     top_variation_pct = top_variation_value(10, "pct")
     st.table(top_variation_pct)
-
-    st.info("Traking volume of BTC traded globally")
-    st.write(geo_scatter(world_map_volume_btc))
-
 
 try:
     
@@ -64,10 +80,7 @@ try:
             graph_exchange = plot_exchange(df_market, currency_code )
             graph_big_mac = plot_big_mac(df_big_mac, country)
 
-
-
         else:
-            
 
             add_trace_exchange(df_market,currency_code, graph_exchange )
             add_trace_big_mac(df_big_mac, country, graph_big_mac)
@@ -84,7 +97,6 @@ try:
 
     ### Implicit exchange rate & Big Mac index:
     
-    
     st.write(graph_exchange)
 
     average, max, min = summary_metrics(df_market, currency_code)
@@ -98,5 +110,3 @@ try:
 
 except:
     print('Waiting for country selection')
-
-

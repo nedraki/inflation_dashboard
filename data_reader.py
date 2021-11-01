@@ -74,7 +74,7 @@ def top_variation_value(number, columns, df = df_market_mapping):
 
     """Get the n largest value for a given column on df_market_mapping"""
 
-    top_variations = df_market_mapping[["country","pct"]].nlargest(n=number, columns=columns)
+    top_variations = df_market_mapping[["country",f"{columns}"]].nlargest(n=number, columns=columns)
     top_variations = top_variations.drop_duplicates(subset="country")
     top_variations.set_index("country", inplace=True)
 

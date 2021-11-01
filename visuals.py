@@ -75,6 +75,8 @@ def update_layout(fig, title, x_axis, y_axis, legend):
 
 def geo_scatter(df):
 
+    df = df[["country","volume_btc"]]
+
     fig = px.scatter_geo(df, locations="country", 
                      locationmode= "country names", 
                      size = "volume_btc",
