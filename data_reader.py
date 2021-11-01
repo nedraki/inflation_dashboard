@@ -79,3 +79,13 @@ def top_variation_value(number, columns, df = df_market_mapping):
     top_variations.set_index("country", inplace=True)
 
     return top_variations
+
+def summary_metrics(df, currency_code):
+
+    df = df[df['currency_code'] == currency_code ]
+
+    average_pct = df["pct"].mean()
+    max_pct = df["pct"].max()
+    min_pct = df["pct"].min()
+
+    return average_pct, max_pct, min_pct

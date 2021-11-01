@@ -7,7 +7,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 
 
-from data_reader import df_big_mac, df_market, df_country, df_market_mapping, pct_change, metrics, top_variation_value
+from data_reader import df_big_mac, df_market, df_country, df_market_mapping, pct_change, metrics, top_variation_value, summary_metrics
 from visuals import add_trace_big_mac, add_trace_exchange, geo_scatter, plot_big_mac, plot_exchange, update_layout, map_country, world_map
 
 
@@ -61,13 +61,17 @@ try:
 
                 st.metric("BTC traded today", metric_volume_btc)
             
-            graph_big_mac = plot_big_mac(df_big_mac, country)
             graph_exchange = plot_exchange(df_market, currency_code )
+            graph_big_mac = plot_big_mac(df_big_mac, country)
+
 
 
         else:
-            add_trace_big_mac(df_big_mac, country, graph_big_mac)
+            
+
             add_trace_exchange(df_market,currency_code, graph_exchange )
+            add_trace_big_mac(df_big_mac, country, graph_big_mac)
+
 
     # Update layout
     update_layout(graph_big_mac,
@@ -80,7 +84,16 @@ try:
 
     ### Implicit exchange rate & Big Mac index:
     
+    
     st.write(graph_exchange)
+
+    average, max, min = summary_metrics(df_market, currency_code)
+    
+    if average > 0:
+        st.error(f" The {currency_code} has been devalued in average by {round(average,2)}%")
+    else:
+        st.info(f"{currency_code} has been appreciated by {abs(round(average,2))}% relative to the USD")
+    
     st.write(graph_big_mac)
 
 except:
