@@ -34,7 +34,7 @@ column_1, column_2 = st.columns(2)
 if bitcoin_market == ["Global trade"]:
     
     try:
-        st.info("Traking volume of BTC traded globally")
+        st.info("Tracking volume of BTC traded globally")
 
         world_map_volume_btc = df_market_mapping[["country","currency_code","volume_btc"]]
         st.write(geo_scatter(world_map_volume_btc))
@@ -68,6 +68,7 @@ try:
         last_exchange_rate, pct_delta, metric_volume_btc = metrics(df_market, currency_code )
 
         if index == 0:
+
            
             with column_1:
                 st.metric("Implicit Exchange rate",
