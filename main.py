@@ -19,7 +19,7 @@ st.title('Inflation detective :sleuth_or_spy:')
 ### Selection of countries for line plot of exchange rate:
 
 country_selection = st.sidebar.multiselect('Country of interest', 
-            options= df_market_mapping.country.unique())
+            options= df_market_mapping.country.sort_values().unique())
 
 bitcoin_market = st.sidebar.multiselect('Trading of currencies for Bitcoins', options=["Global trade"])
 
