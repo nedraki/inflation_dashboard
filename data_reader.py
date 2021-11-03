@@ -2,6 +2,7 @@ import os
 import numpy as np
 import pandas as pd
 import streamlit as st
+from datetime import datetime
 from visuals import map_country
 
 """Datasets of interest:
@@ -88,3 +89,15 @@ def summary_metrics(df, currency_code):
     min_pct = df["pct"].min()
 
     return average_pct, max_pct, min_pct
+
+def big_mac_exchange_rate(country_selected, df = df_big_mac):
+    
+    """Retrieve last exchange for dollar big mac and date of last datapoint"""
+
+    df_big_mac_by_country = df[df['country'] == f'{country_selected}']
+    
+    exchange = df_big_mac_by_country.dollar_ex.values[-1]
+    date = df_big_mac_by_country.date.values[-1]
+    date = np.datetime_as_string(date, unit = "D")
+
+    return exchange, date

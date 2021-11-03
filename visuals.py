@@ -5,28 +5,34 @@ import streamlit as st
 # from streamlit.secrets import Secrets
 
 ## Country selection:
-def plot_big_mac(df, country_selected):
+def plot_big_mac(df, values_y, country_selected):
 
-    """Plot for Bic Mac Index price vs time"""
+    """Plot for Bic Mac Index price vs time
 
-    #[docs plot](https://plotly.com/python/plotly-express/)
+        values: 'dollar_price' or 'dollar_ex'"""
+
+    #[docs plot](https://plotly.com/python/plotly-express/) 
     df_by_country = df[df['country'] == f'{country_selected}']
     df = df_by_country
+    values = df[f'{values_y}']
+
 
     fig = go.Figure()
-    fig.add_trace(go.Scatter(x=df.date, y=df.dollar_price,
+    fig.add_trace(go.Scatter(x=df.date, y=values,
             mode='lines+markers',
             name=country_selected))
 
     return fig
 
-def add_trace_big_mac(df,country_selected, fig):
+def add_trace_big_mac(df,values_y,country_selected, fig):
 
 
     df_by_country = df[df['country'] == f'{country_selected}']
     df = df_by_country
+    values = df[f'{values_y}']
 
-    fig.add_trace(go.Scatter(x=df.date, y=df.dollar_price,
+
+    fig.add_trace(go.Scatter(x=df.date, y=values,
             mode='lines+markers',
             name=country_selected))
 
