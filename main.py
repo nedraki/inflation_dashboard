@@ -107,9 +107,13 @@ try:
             "USD to buy a Big Mac", "time",
             "USD Price","Country")
 
+    update_layout(graph_big_mac_ex,
+            "Historical exhange rate", "time",
+            "Exchange rate", "Currency code")
+
     update_layout(graph_exchange,
-            "Implicit exhange rate", "time",
-            "% Variation", "Currency code")
+        "Implicit exhange rate", "time",
+        "% Variation", "Currency code")
 
     ### Implicit exchange rate & Big Mac index:
     
@@ -123,9 +127,9 @@ try:
         st.error(f" The {currency_code} has been devalued in average by {round(average,2)}%")
     else:
         st.info(f"{currency_code} has been appreciated by {abs(round(average,2))}% relative to the USD")
-    
+
+    st.write(graph_big_mac_ex)   
     st.write(graph_big_mac)
-    st.write(graph_big_mac_ex)
 
 except:
     print('Waiting for country selection')
