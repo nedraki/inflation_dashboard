@@ -93,11 +93,21 @@ def summary_metrics(df, currency_code):
 def big_mac_exchange_rate(country_selected, df = df_big_mac):
     
     """Retrieve last exchange for dollar big mac and date of last datapoint"""
+    try:
+        df_big_mac_by_country = df[df['country'] == f'{country_selected}']
+        
+        exchange = df_big_mac_by_country.dollar_ex.values[-1]
+        date = df_big_mac_by_country.date.values[-1]
+        date = np.datetime_as_string(date, unit = "D")
 
-    df_big_mac_by_country = df[df['country'] == f'{country_selected}']
+        return exchange, date
     
-    exchange = df_big_mac_by_country.dollar_ex.values[-1]
-    date = df_big_mac_by_country.date.values[-1]
-    date = np.datetime_as_string(date, unit = "D")
+    except:
+        return None, None
 
-    return exchange, date
+        # ##### Exception handling for missing data on Big Mac Index: #####
+        # if country in df_big_mac.values :
+        #     dollar_big_mac, date = big_mac_exchange_rate(country)
+        # else:
+        #     dollar_big_mac, date = None, "Data not available"
+        # #### This could be refactored in a better way #########

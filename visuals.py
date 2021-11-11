@@ -12,31 +12,42 @@ def plot_big_mac(df, values_y, country_selected):
         values: 'dollar_price' or 'dollar_ex'"""
 
     #[docs plot](https://plotly.com/python/plotly-express/) 
-    df_by_country = df[df['country'] == f'{country_selected}']
-    df = df_by_country
-    values = df[f'{values_y}']
 
+    if country_selected in df.values:
 
-    fig = go.Figure()
-    fig.add_trace(go.Scatter(x=df.date, y=values,
-            mode='lines+markers',
-            name=country_selected))
+        df_by_country = df[df['country'] == f'{country_selected}']
+        df = df_by_country
+        values = df[f'{values_y}']
 
-    return fig
+        fig = go.Figure()
+        fig.add_trace(go.Scatter(x=df.date, y=values,
+                mode='lines+markers',
+                name=country_selected))
+
+        return fig
+
+    else:
+
+        return "Country not available in Big Mac Data Base"
 
 def add_trace_big_mac(df,values_y,country_selected, fig):
 
+    if country_selected in df.values:
 
-    df_by_country = df[df['country'] == f'{country_selected}']
-    df = df_by_country
-    values = df[f'{values_y}']
+        df_by_country = df[df['country'] == f'{country_selected}']
+        df = df_by_country
+        values = df[f'{values_y}']
 
 
-    fig.add_trace(go.Scatter(x=df.date, y=values,
-            mode='lines+markers',
-            name=country_selected))
+        fig.add_trace(go.Scatter(x=df.date, y=values,
+                mode='lines+markers',
+                name=country_selected))
 
-    return fig
+        return fig
+
+    else:
+
+        return None
 
 
 def plot_exchange(df, currency_code):
@@ -72,12 +83,14 @@ def add_trace_exchange(df, currency_code, fig):
 
 
 def update_layout(fig, title, x_axis, y_axis, legend):
-    
-    fig.update_layout(
-    title=title,
-    xaxis_title=x_axis,
-    yaxis_title=y_axis,
-    legend_title=legend)
+    try:
+        fig.update_layout(
+        title=title,
+        xaxis_title=x_axis,
+        yaxis_title=y_axis,
+        legend_title=legend)
+    except:
+        "fig object does not exist"
 
 @st.cache()
 def geo_scatter(df):
