@@ -1,5 +1,6 @@
-from numpy import add
+import numpy as np
 import pandas as pd
+import datetime
 import os
 import random
 import streamlit as st
@@ -7,7 +8,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 
 
-from data_reader import df_big_mac, df_market, df_country, df_market_mapping, pct_change, metrics, top_variation_value, summary_metrics
+from data_reader import df_big_mac, df_market, df_country, df_market_mapping, pct_change, metrics, top_variation_value, summary_metrics, big_mac_exchange_rate
 from visuals import add_trace_big_mac, add_trace_exchange, geo_scatter, plot_big_mac, plot_exchange, update_layout, map_country, world_map
 
 
@@ -19,7 +20,7 @@ st.title('Inflation detective :sleuth_or_spy:')
 ### Selection of countries for line plot of exchange rate:
 
 country_selection = st.sidebar.multiselect('Country of interest', 
-            options= df_market_mapping.country.unique())
+            options= df_market_mapping.country.sort_values().unique())
 
 bitcoin_market = st.sidebar.multiselect('Trading of currencies for Bitcoins', options=["Global trade"])
 
@@ -34,9 +35,9 @@ column_1, column_2 = st.columns(2)
 if bitcoin_market == ["Global trade"]:
     
     try:
-        st.info("Traking volume of BTC traded globally")
+        st.info("Tracking volume of BTC traded globally")
 
-        world_map_volume_btc = df_market_mapping[["country","currency_code","volume_btc"]]
+        world_map_volume_btc = df_market_mapping[["country","volume_btc"]]
         st.write(geo_scatter(world_map_volume_btc))
 
         ## Biggest traders by country:
@@ -49,7 +50,7 @@ if bitcoin_market == ["Global trade"]:
         print('Error ploting Volume BTC map')
 
 # World map exchange rate:
-if len(country_selection) == 0:
+if len(country_selection) == 0 and bitcoin_market == []:
 
     
     world_map_inflation = world_map(df_market_mapping[["country","currency_code", "pct"]])
@@ -64,50 +65,74 @@ if len(country_selection) == 0:
 try:
     
     for index, country in enumerate(country_selection):
+        
         currency_code = map_country(df_country, country)
         last_exchange_rate, pct_delta, metric_volume_btc = metrics(df_market, currency_code )
+        dollar_big_mac, date = big_mac_exchange_rate(country)
 
-        if index == 0:
-           
+        
+        if (index == 0):
+
             with column_1:
+
                 st.metric("Implicit Exchange rate",
                     f"{last_exchange_rate}"+' ' + currency_code+"/USD",
                     delta = pct_delta,
                     delta_color= "off" )
+                st.metric("BTC traded today", metric_volume_btc)
+                
+
             with column_2:
 
-                st.metric("BTC traded today", metric_volume_btc)
-            
+                st.metric(f"Dollar Big Mac *{date}*", dollar_big_mac)
+
+
             graph_exchange = plot_exchange(df_market, currency_code )
-            graph_big_mac = plot_big_mac(df_big_mac, country)
+
+            graph_big_mac_ex = plot_big_mac(df_big_mac,"dollar_ex", country)
+            graph_big_mac = plot_big_mac(df_big_mac,"dollar_price", country)
+
 
         else:
 
             add_trace_exchange(df_market,currency_code, graph_exchange )
-            add_trace_big_mac(df_big_mac, country, graph_big_mac)
+            add_trace_big_mac(df_big_mac,"dollar_ex", country, graph_big_mac_ex)
+            add_trace_big_mac(df_big_mac,"dollar_price", country, graph_big_mac)
 
 
-    # Update layout
-    update_layout(graph_big_mac,
-            "USD to buy a Big Mac", "time",
-            "Price in USD","Country")
+### Update layout
 
     update_layout(graph_exchange,
-            "Implicit exhange rate", "time",
-            "% Variation", "Currency code")
+        "Implicit exhange rate", "time",
+        "% Variation", "Currency code")
 
-    ### Implicit exchange rate & Big Mac index:
+    update_layout(graph_big_mac,
+            "USD to buy a Big Mac", "time",
+            "USD Price","Country")
+
+    update_layout(graph_big_mac_ex,
+            "Historical exhange rate", "time",
+            "Exchange rate", "Currency code")
+
+
+   
+    ### Implicit exchange rate:
     
     st.write(graph_exchange)
 
+    ### Complementary metrics:
     average, max, min = summary_metrics(df_market, currency_code)
     
     if average > 0:
         st.error(f" The {currency_code} has been devalued in average by {round(average,2)}%")
     else:
         st.info(f"{currency_code} has been appreciated by {abs(round(average,2))}% relative to the USD")
-    
+
+
+    ### Big Mac visuals: 
+    st.write(graph_big_mac_ex)   
     st.write(graph_big_mac)
+
 
 except:
     print('Waiting for country selection')
