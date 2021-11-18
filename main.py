@@ -8,11 +8,13 @@ import plotly.express as px
 import plotly.graph_objects as go
 
 
-from data_reader import df_big_mac, df_market, df_country, df_market_mapping, pct_change, metrics, top_variation_value, summary_metrics, big_mac_exchange_rate
+from data_reader import df_big_mac, df_market, df_country, df_market_mapping, pct_change, metrics, top_variation_value, summary_metrics, big_mac_exchange_rate, write_summary_metrics
 from visuals import add_trace_big_mac, add_trace_exchange, geo_scatter, plot_big_mac, plot_exchange, update_layout, map_country, world_map
 
 
 st.title('Inflation detective :sleuth_or_spy:')
+
+st.write("An effort to track real variance on the exchange rate of currencies against the USD")
 
 # map_options = ["Inflation Hotspots","Volume BTC traded"]
 # map_selection = st.sidebar.checkbox("World maps", value=False)
@@ -52,7 +54,6 @@ if bitcoin_market == ["Global trade"]:
 # World map exchange rate:
 if len(country_selection) == 0 and bitcoin_market == []:
 
-    
     world_map_inflation = world_map(df_market_mapping[["country","currency_code", "pct"]])
     
     st.info("Percentual variation on exchange rate by country")
@@ -63,14 +64,17 @@ if len(country_selection) == 0 and bitcoin_market == []:
     st.table(top_variation_pct)
 
 try:
-    
+
+    complementary_metrics = []
+
     for index, country in enumerate(country_selection):
         
         currency_code = map_country(df_country, country)
         last_exchange_rate, pct_delta, metric_volume_btc = metrics(df_market, currency_code )
         dollar_big_mac, date = big_mac_exchange_rate(country)
-
         
+        complementary_metrics.append(write_summary_metrics(df_market, currency_code))
+
         if (index == 0):
 
             with column_1:
@@ -91,7 +95,6 @@ try:
 
             graph_big_mac_ex = plot_big_mac(df_big_mac,"dollar_ex", country)
             graph_big_mac = plot_big_mac(df_big_mac,"dollar_price", country)
-
 
         else:
 
@@ -120,14 +123,11 @@ try:
     
     st.write(graph_exchange)
 
-    ### Complementary metrics:
-    average, max, min = summary_metrics(df_market, currency_code)
-    
-    if average > 0:
-        st.error(f" The {currency_code} has been devalued in average by {round(average,2)}%")
-    else:
-        st.info(f"{currency_code} has been appreciated by {abs(round(average,2))}% relative to the USD")
-
+    for metric in complementary_metrics:
+        if metric[1] == "devaluation":
+            st.error(metric[0])
+        else:
+            st.info(metric[0])
 
     ### Big Mac visuals: 
     st.write(graph_big_mac_ex)   

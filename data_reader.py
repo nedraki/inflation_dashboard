@@ -2,7 +2,8 @@ import os
 import numpy as np
 import pandas as pd
 import streamlit as st
-from datetime import datetime
+import datetime as dt
+from datetime import datetime, date
 from visuals import map_country
 
 """Datasets of interest:
@@ -90,6 +91,26 @@ def summary_metrics(df, currency_code):
 
     return average_pct, max_pct, min_pct
 
+def write_summary_metrics(df, currency_code):
+
+    """Day zero correspond to first day on dataset"""
+
+    day_zero = dt.date(2021, 10, 3)
+    today = dt.date.today()
+    delta = (today - day_zero).days
+
+    ### Complementary metrics:
+    average, max, min = summary_metrics(df, currency_code)
+    
+    if average > 0:
+        return (f" The {currency_code} has been devalued in \
+                        average by {round(average,2)}% in the last {delta} days"), "devaluation"
+    else:
+        return (f"{currency_code} has been appreciated by\
+             {abs(round(average,2))}% relative to the USD in the last {delta} days"), "appreciation"
+
+
+
 def big_mac_exchange_rate(country_selected, df = df_big_mac):
     
     """Retrieve last exchange for dollar big mac and date of last datapoint"""
@@ -104,10 +125,3 @@ def big_mac_exchange_rate(country_selected, df = df_big_mac):
     
     except:
         return None, None
-
-        # ##### Exception handling for missing data on Big Mac Index: #####
-        # if country in df_big_mac.values :
-        #     dollar_big_mac, date = big_mac_exchange_rate(country)
-        # else:
-        #     dollar_big_mac, date = None, "Data not available"
-        # #### This could be refactored in a better way #########
