@@ -5,32 +5,49 @@ import streamlit as st
 # from streamlit.secrets import Secrets
 
 ## Country selection:
-def plot_big_mac(df, country_selected):
+def plot_big_mac(df, values_y, country_selected):
 
-    """Plot for Bic Mac Index price vs time"""
+    """Plot for Bic Mac Index price vs time
 
-    #[docs plot](https://plotly.com/python/plotly-express/)
-    df_by_country = df[df['country'] == f'{country_selected}']
-    df = df_by_country
+        values: 'dollar_price' or 'dollar_ex'"""
 
-    fig = go.Figure()
-    fig.add_trace(go.Scatter(x=df.date, y=df.dollar_price,
-            mode='lines+markers',
-            name=country_selected))
+    #[docs plot](https://plotly.com/python/plotly-express/) 
 
-    return fig
+    if country_selected in df.values:
 
-def add_trace_big_mac(df,country_selected, fig):
+        df_by_country = df[df['country'] == f'{country_selected}']
+        df = df_by_country
+        values = df[f'{values_y}']
+
+        fig = go.Figure()
+        fig.add_trace(go.Scatter(x=df.date, y=values,
+                mode='lines+markers',
+                name=country_selected))
+
+        return fig
+
+    else:
+
+        return "Country not available in Big Mac Data Base"
+
+def add_trace_big_mac(df,values_y,country_selected, fig):
+
+    if country_selected in df.values:
+
+        df_by_country = df[df['country'] == f'{country_selected}']
+        df = df_by_country
+        values = df[f'{values_y}']
 
 
-    df_by_country = df[df['country'] == f'{country_selected}']
-    df = df_by_country
+        fig.add_trace(go.Scatter(x=df.date, y=values,
+                mode='lines+markers',
+                name=country_selected))
 
-    fig.add_trace(go.Scatter(x=df.date, y=df.dollar_price,
-            mode='lines+markers',
-            name=country_selected))
+        return fig
 
-    return fig
+    else:
+
+        return None
 
 
 def plot_exchange(df, currency_code):
@@ -66,12 +83,14 @@ def add_trace_exchange(df, currency_code, fig):
 
 
 def update_layout(fig, title, x_axis, y_axis, legend):
-    
-    fig.update_layout(
-    title=title,
-    xaxis_title=x_axis,
-    yaxis_title=y_axis,
-    legend_title=legend)
+    try:
+        fig.update_layout(
+        title=title,
+        xaxis_title=x_axis,
+        yaxis_title=y_axis,
+        legend_title=legend)
+    except:
+        "fig object does not exist"
 
 @st.cache()
 def geo_scatter(df):
