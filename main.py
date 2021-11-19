@@ -10,14 +10,10 @@ import plotly.graph_objects as go
 
 from data_reader import df_big_mac, df_market, df_country, df_market_mapping, pct_change, metrics, top_variation_value, summary_metrics, big_mac_exchange_rate, write_summary_metrics
 from visuals import add_trace_big_mac, add_trace_exchange, geo_scatter, plot_big_mac, plot_exchange, update_layout, map_country, world_map
-
+from about import message_users
 
 st.title('Inflation detective :sleuth_or_spy:')
 
-st.write("An effort to track real variance on the exchange rate of currencies against the USD")
-
-# map_options = ["Inflation Hotspots","Volume BTC traded"]
-# map_selection = st.sidebar.checkbox("World maps", value=False)
 
 ### Selection of countries for line plot of exchange rate:
 
@@ -26,15 +22,26 @@ country_selection = st.sidebar.multiselect('Country of interest',
 
 bitcoin_market = st.sidebar.multiselect('Trading of currencies for Bitcoins', options=["Global trade"])
 
+# Sidebar message:
+st.sidebar.write("An effort to track real variance on the exchange rate of currencies against the USD")
+download_data = st.sidebar.button("Download the data")
+message = st.sidebar.button("Read more about the project")
+
 ### Columns for layout:
 
 # column_1, column_2, column_3 = st.columns(3)
 column_1, column_2 = st.columns(2)
 
 
+if message:
+    st.markdown(message_users)
+if download_data:
+    st.markdown('[Download link](https://github.com/nedraki/inflation_dashboard/tree/main/data)')
+
+
 ### Global map Volume BTC
 
-if bitcoin_market == ["Global trade"]:
+elif bitcoin_market == ["Global trade"]:
     
     try:
         st.info("Tracking volume of BTC traded globally")
@@ -52,7 +59,7 @@ if bitcoin_market == ["Global trade"]:
         print('Error ploting Volume BTC map')
 
 # World map exchange rate:
-if len(country_selection) == 0 and bitcoin_market == []:
+elif len(country_selection) == 0 and bitcoin_market == []:
 
     world_map_inflation = world_map(df_market_mapping[["country","currency_code", "pct"]])
     
@@ -101,7 +108,7 @@ try:
             add_trace_exchange(df_market,currency_code, graph_exchange )
             add_trace_big_mac(df_big_mac,"dollar_ex", country, graph_big_mac_ex)
             add_trace_big_mac(df_big_mac,"dollar_price", country, graph_big_mac)
-
+    
 
 ### Update layout
 
@@ -136,3 +143,5 @@ try:
 
 except:
     print('Waiting for country selection')
+
+
