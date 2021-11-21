@@ -6,7 +6,6 @@
 .vscode/
 # Ignore all daily data on csv files
 data/csv/*
-data/*.db
 
 # Pycache
 *_pycache__

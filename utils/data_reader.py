@@ -31,6 +31,14 @@ df_market_mapping.dropna(inplace=True)
 
 ###IGNORING DIRTY DATA POINTS FOR VENEZUELA
 df_market_mapping = df_market_mapping.loc[df_market_mapping["country"] != "Venezuela"]
+
+df_filtered = df_market_mapping[df_market_mapping.country == "Venezuela"]
+df_filtered = df_filtered[df_filtered.implicit_exchange > 100]
+index_to_drop = df_filtered.index.tolist()
+df_filtered_final = df_market_mapping.drop(index = index_to_drop)
+print(len(df_market_mapping))
+print(len(df_filtered_final))
+df_market_mapping = df_filtered_final
 #####
 
 
