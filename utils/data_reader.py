@@ -29,18 +29,16 @@ df_country = pd.read_csv(path_to_country)
 df_market_mapping = pd.merge(df_market, df_country, on = 'currency_code', how = 'inner')
 df_market_mapping.dropna(inplace=True)
 
-###IGNORING DIRTY DATA POINTS FOR VENEZUELA
-df_market_mapping = df_market_mapping.loc[df_market_mapping["country"] != "Venezuela"]
+###FILTERING DIRTY DATA POINTS FOR VENEZUELA
 
 df_filtered = df_market_mapping[df_market_mapping.country == "Venezuela"]
+# High Values on data are due to wrong entries on DB
+# Users are currently using two different scales (VEF and VED)
 df_filtered = df_filtered[df_filtered.implicit_exchange > 100]
 index_to_drop = df_filtered.index.tolist()
 df_filtered_final = df_market_mapping.drop(index = index_to_drop)
-print(len(df_market_mapping))
-print(len(df_filtered_final))
-df_market_mapping = df_filtered_final
+df_market_mapping = df_filtered_final.sort_values(by="date", axis=0)
 #####
-
 
 class DataReader :
 
