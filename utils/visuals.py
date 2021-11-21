@@ -14,7 +14,11 @@ class Visuals:
     
     def map_country(self, df, country):
     # Mapping country with currency code
-        return df[df.country == country].currency_code.values[0]
+        if country == "Venezuela":
+            # Returning values of new currency
+            return "VED"
+        else:
+            return df[df.country == country].currency_code.values[0]
 
 
     ## Country selection:

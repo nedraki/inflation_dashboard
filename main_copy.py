@@ -79,8 +79,9 @@ try:
     for index, country in enumerate(country_selection):
         
         currency_code = plot.map_country(df_country, country)
-
+        st.write(currency_code)
         last_exchange_rate, pct_delta, metric_volume_btc = read.metrics(df_market, currency_code )
+        st.write("done_2")
         dollar_big_mac, date = read.big_mac_exchange_rate(country)
         complementary_metrics.append(read.write_summary_metrics(df_market, currency_code))
         if (index == 0):

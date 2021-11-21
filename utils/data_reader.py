@@ -37,7 +37,7 @@ df_filtered = df_market_mapping[df_market_mapping.country == "Venezuela"]
 df_filtered = df_filtered[df_filtered.implicit_exchange > 100]
 index_to_drop = df_filtered.index.tolist()
 df_filtered_final = df_market_mapping.drop(index = index_to_drop)
-df_market_mapping = df_filtered_final.sort_values(by="date", axis=0)
+df_market_mapping = df_filtered_final
 #####
 
 class DataReader :
