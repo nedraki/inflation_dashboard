@@ -8,7 +8,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 
 
-from utils.data_reader import DataReader
+from utils.data_reader import DataReader, df_big_mac, df_market, df_country, df_market_mapping
 from utils.visuals import Visuals
 from about import message_users
 
@@ -48,7 +48,7 @@ elif bitcoin_market == ["Global trade"]:
     try:
         st.info("Tracking volume of BTC traded globally")
 
-        world_map_volume_btc = plot.df_market_mapping[["country","volume_btc"]]
+        world_map_volume_btc = df_market_mapping[["country","volume_btc"]]
         st.write(plot.geo_scatter(world_map_volume_btc))
 
         ## Biggest traders by country:
@@ -79,11 +79,10 @@ try:
     for index, country in enumerate(country_selection):
         
         currency_code = plot.map_country(df_country, country)
-        last_exchange_rate, pct_delta, metric_volume_btc = read.metrics(df_market, currency_code )
-        dollar_big_mac, date = plot.big_mac_exchange_rate(country)
-        
-        complementary_metrics.append(read.write_summary_metrics(df_market, currency_code))
 
+        last_exchange_rate, pct_delta, metric_volume_btc = read.metrics(df_market, currency_code )
+        dollar_big_mac, date = read.big_mac_exchange_rate(country)
+        complementary_metrics.append(read.write_summary_metrics(df_market, currency_code))
         if (index == 0):
 
             with column_1:

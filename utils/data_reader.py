@@ -1,10 +1,37 @@
 import os
 import numpy as np
 import pandas as pd
-import streamlit as st
 import datetime as dt
 from datetime import datetime, date
 from visuals import map_country
+
+"""Datasets of interest:
+big-mac-full-index.csv: Big mac index- The economist
+CurrenciesDataBase.db Data collected daily from localbitcoins
+country-code: Relation currency & countries
+"""
+
+# Defining path to files:
+path_to_big_mac = os.path.abspath('./data/big_mac_index/big-mac-full-index.csv')
+path_to_currencies = "sqlite:///data/CurrenciesDataBase_V2.db"
+path_to_country = os.path.abspath("./data/country-currency_code/country-code-to-currency-code-mapping.csv")
+
+# Reading files:
+
+df_big_mac = pd.read_csv(path_to_big_mac)
+df_big_mac["date"] = pd.to_datetime(df_big_mac.date)
+df_big_mac = df_big_mac.sort_values(by="date", axis=0)
+
+df_market = pd.read_sql('currencies_vs_btc', path_to_currencies)
+df_country = pd.read_csv(path_to_country)
+
+## Merge market data with countries dataset 
+df_market_mapping = pd.merge(df_market, df_country, on = 'currency_code', how = 'inner')
+df_market_mapping.dropna(inplace=True)
+
+###IGNORING DIRTY DATA POINTS FOR VENEZUELA
+df_market_mapping = df_market_mapping.loc[df_market_mapping["country"] != "Venezuela"]
+#####
 
 
 class DataReader :
@@ -12,36 +39,7 @@ class DataReader :
     def __init__(self):
         "Data Reader"
 
-        """Datasets of interest:
-    big-mac-full-index.csv: Big mac index- The economist
-    CurrenciesDataBase.db Data collected daily from localbitcoins
-    country-code: Relation currency & countries
-    """
-    # Defining path to files:
-
-    path_to_big_mac = os.path.abspath('./data/big_mac_index/big-mac-full-index.csv')
-    path_to_currencies = "sqlite:///data/CurrenciesDataBase_V2.db"
-    path_to_country = os.path.abspath("./data/country-currency_code/country-code-to-currency-code-mapping.csv")
-
-
-    # Reading files:
-
-    df_big_mac = pd.read_csv(path_to_big_mac)
-    df_big_mac["date"] = pd.to_datetime(df_big_mac.date)
-    df_big_mac = df_big_mac.sort_values(by="date", axis=0)
-
-    df_market = pd.read_sql('currencies_vs_btc', path_to_currencies)
-    df_country = pd.read_csv(path_to_country)
-
-
-    ## Merge market data with countries dataset 
-    df_market_mapping = pd.merge(df_market, df_country, on = 'currency_code', how = 'inner')
-    df_market_mapping.dropna(inplace=True)
-
-    ###IGNORING DATA POINTS FOR VENEZUELA
-    df_market_mapping = df_market_mapping.loc[df_market_mapping["country"] != "Venezuela"]
-    #####
-
+    ### Functions for reading key metrics:
 
     def pct_change(self, df, currency_code, date_reference):
 
@@ -106,14 +104,14 @@ class DataReader :
         delta = (today - day_zero).days
 
         ### Complementary metrics:
-        average, max, min = summary_metrics(df, currency_code)
+        self.average, self.max, self.min = self.summary_metrics(df, currency_code)
         
-        if average > 0:
+        if self.average > 0:
             return (f" The {currency_code} has been devalued in \
-                            average by {round(average,2)}% in the last {delta} days"), "devaluation"
+                            average by {round(self.average,2)}% in the last {delta} days"), "devaluation"
         else:
             return (f"{currency_code} has been appreciated by\
-                {abs(round(average,2))}% relative to the USD in the last {delta} days"), "appreciation"
+                {abs(round(self.average,2))}% relative to the USD in the last {delta} days"), "appreciation"
 
 
 
