@@ -36,7 +36,8 @@ df_filtered = df_market_mapping[df_market_mapping.country == "Venezuela"]
 # Users are currently using two different scales (VEF and VED)
 df_filtered = df_filtered[df_filtered.implicit_exchange > 100]
 index_to_drop = df_filtered.index.tolist()
-df_market_mapping.drop(index = index_to_drop, inplace=True)
+df_filtered_final = df_market_mapping.drop(index = index_to_drop)
+df_market_mapping = df_filtered_final
 print(len(df_market_mapping))
 
 #####

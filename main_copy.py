@@ -79,11 +79,10 @@ try:
     for index, country in enumerate(country_selection):
         
         currency_code = plot.map_country(df_country, country)
-        st.write(currency_code)
-        last_exchange_rate, pct_delta, metric_volume_btc = read.metrics(df_market, currency_code )
-        st.write("done_2")
+        last_exchange_rate, pct_delta, metric_volume_btc = read.metrics(df_market_mapping, currency_code )
+       
         dollar_big_mac, date = read.big_mac_exchange_rate(country)
-        complementary_metrics.append(read.write_summary_metrics(df_market, currency_code))
+        complementary_metrics.append(read.write_summary_metrics(df_market_mapping, currency_code))
         if (index == 0):
 
             with column_1:
@@ -100,14 +99,14 @@ try:
                 st.metric(f"Dollar Big Mac *{date}*", dollar_big_mac)
 
 
-            graph_exchange = plot.plot_exchange(df_market, currency_code )
+            graph_exchange = plot.plot_exchange(df_market_mapping, currency_code )
 
             graph_big_mac_ex = plot.plot_big_mac(df_big_mac,"dollar_ex", country)
             graph_big_mac = plot.plot_big_mac(df_big_mac,"dollar_price", country)
 
         else:
 
-            plot.add_trace_exchange(df_market,currency_code, graph_exchange )
+            plot.add_trace_exchange(df_market_mapping,currency_code, graph_exchange )
             plot.add_trace_big_mac(df_big_mac,"dollar_ex", country, graph_big_mac_ex)
             plot.add_trace_big_mac(df_big_mac,"dollar_price", country, graph_big_mac)
     
