@@ -30,17 +30,17 @@ df_market_mapping = pd.merge(df_market, df_country, on = 'currency_code', how = 
 df_market_mapping.dropna(inplace=True)
 
 ###FILTERING DIRTY DATA POINTS FOR VENEZUELA
-print(len(df_market_mapping))
 df_filtered = df_market_mapping[df_market_mapping.country == "Venezuela"]
+
 # High Values on data are due to wrong entries on DB
 # Users are currently using two different scales (VEF and VED)
+
+# df_filtered["implicit_exchange"] = df_filtered['avg_1h'].divide(df_filtered["avg_24h_usd"], fill_value = None)
 df_filtered = df_filtered[df_filtered.implicit_exchange > 100]
 index_to_drop = df_filtered.index.tolist()
-df_filtered_final = df_market_mapping.drop(index = index_to_drop)
-df_market_mapping = df_filtered_final
-print(len(df_market_mapping))
+df_filtered_final = df_market_mapping.drop(index = index_to_drop, inplace=True)
 
-#####
+##############################
 
 class DataReader :
 
@@ -81,7 +81,11 @@ class DataReader :
 
         metric_volume_btc = round(implicit_exchange['volume_btc'].values[-1], 4)
 
-        return metric_exchange_rate, metric_pct, metric_volume_btc
+        last_update = implicit_exchange["date"].values[-1]
+        # Convert full timestampt to Day format
+        last_update = np.datetime_as_string(last_update, unit = "D")
+
+        return metric_exchange_rate, metric_pct, metric_volume_btc, last_update
 
     def top_variation_value(self, number, columns, df = df_market_mapping):
 

@@ -79,8 +79,7 @@ try:
     for index, country in enumerate(country_selection):
         
         currency_code = plot.map_country(df_country, country)
-        last_exchange_rate, pct_delta, metric_volume_btc = read.metrics(df_market_mapping, currency_code )
-       
+        last_exchange_rate, pct_delta, metric_volume_btc, last_update = read.metrics(df_market_mapping, currency_code )
         dollar_big_mac, date = read.big_mac_exchange_rate(country)
         complementary_metrics.append(read.write_summary_metrics(df_market_mapping, currency_code))
         if (index == 0):
@@ -91,13 +90,13 @@ try:
                     f"{last_exchange_rate}"+' ' + currency_code+"/USD",
                     delta = pct_delta,
                     delta_color= "off" )
-                st.metric("BTC traded today", metric_volume_btc)
+                st.metric(f"BTC traded", metric_volume_btc)
                 
 
             with column_2:
 
                 st.metric(f"Dollar Big Mac *{date}*", dollar_big_mac)
-
+                st.metric(f"Last update", last_update )
 
             graph_exchange = plot.plot_exchange(df_market_mapping, currency_code )
 
