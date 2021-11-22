@@ -7,6 +7,5 @@
 # Ignore all daily data on csv files
 data/csv/*
 
-
 # Pycache
 *_pycache__
