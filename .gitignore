@@ -6,6 +6,10 @@
 .vscode/
 # Ignore all daily data on csv files
 data/csv/*
+<<<<<<< HEAD
+=======
+
+>>>>>>> streamlit_app
 
 # Pycache
 *_pycache__
