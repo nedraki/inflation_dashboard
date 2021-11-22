@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 import datetime as dt
 from datetime import datetime, date
-from visuals import map_country
+from .visuals import Visuals
 
 """Datasets of interest:
 big-mac-full-index.csv: Big mac index- The economist

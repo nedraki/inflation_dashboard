@@ -8,12 +8,14 @@ import plotly.express as px
 import plotly.graph_objects as go
 
 
-from data_reader import df_big_mac, df_market, df_country, df_market_mapping, pct_change, metrics, top_variation_value, summary_metrics, big_mac_exchange_rate, write_summary_metrics
-from visuals import add_trace_big_mac, add_trace_exchange, geo_scatter, plot_big_mac, plot_exchange, update_layout, map_country, world_map
+from utils.data_reader import DataReader, df_big_mac, df_market, df_country, df_market_mapping
+from utils.visuals import Visuals
 from about import message_users
 
 st.title('Inflation detective :sleuth_or_spy:')
 
+plot = Visuals()
+read = DataReader()
 
 ### Selection of countries for line plot of exchange rate:
 
@@ -25,7 +27,7 @@ bitcoin_market = st.sidebar.multiselect('Trading of currencies for Bitcoins', op
 # Sidebar message:
 st.sidebar.write("An effort to track real variance on the exchange rate of currencies against the USD")
 download_data = st.sidebar.button("Download the data")
-message = st.sidebar.button("Read more about the project")
+message = st.sidebar.button("About the project")
 
 ### Columns for layout:
 
@@ -47,10 +49,10 @@ elif bitcoin_market == ["Global trade"]:
         st.info("Tracking volume of BTC traded globally")
 
         world_map_volume_btc = df_market_mapping[["country","volume_btc"]]
-        st.write(geo_scatter(world_map_volume_btc))
+        st.write(plot.geo_scatter(world_map_volume_btc))
 
         ## Biggest traders by country:
-        top_variation_volume = top_variation_value(50, "volume_btc")
+        top_variation_volume = read.top_variation_value(50, "volume_btc")
 
         st.info("Countries moving highest volume on a day:")
         st.table(top_variation_volume)
@@ -61,13 +63,13 @@ elif bitcoin_market == ["Global trade"]:
 # World map exchange rate:
 elif len(country_selection) == 0 and bitcoin_market == []:
 
-    world_map_inflation = world_map(df_market_mapping[["country","currency_code", "pct"]])
+    world_map_inflation = plot.world_map(df_market_mapping[["country","currency_code", "pct"]])
     
     st.info("Percentual variation on exchange rate by country")
     st.write(world_map_inflation)
 
     st.info("Countries with highest variation on exchange rate:")
-    top_variation_pct = top_variation_value(10, "pct")
+    top_variation_pct = read.top_variation_value(10, "pct")
     st.table(top_variation_pct)
 
 try:
@@ -76,12 +78,10 @@ try:
 
     for index, country in enumerate(country_selection):
         
-        currency_code = map_country(df_country, country)
-        last_exchange_rate, pct_delta, metric_volume_btc = metrics(df_market, currency_code )
-        dollar_big_mac, date = big_mac_exchange_rate(country)
-        
-        complementary_metrics.append(write_summary_metrics(df_market, currency_code))
-
+        currency_code = plot.map_country(df_country, country)
+        last_exchange_rate, pct_delta, metric_volume_btc, last_update = read.metrics(df_market_mapping, currency_code )
+        dollar_big_mac, date = read.big_mac_exchange_rate(country)
+        complementary_metrics.append(read.write_summary_metrics(df_market_mapping, currency_code))
         if (index == 0):
 
             with column_1:
@@ -90,37 +90,37 @@ try:
                     f"{last_exchange_rate}"+' ' + currency_code+"/USD",
                     delta = pct_delta,
                     delta_color= "off" )
-                st.metric("BTC traded today", metric_volume_btc)
+                st.metric(f"BTC traded", metric_volume_btc)
                 
 
             with column_2:
 
                 st.metric(f"Dollar Big Mac *{date}*", dollar_big_mac)
+                st.metric(f"Last update", last_update )
 
+            graph_exchange = plot.plot_exchange(df_market_mapping, currency_code )
 
-            graph_exchange = plot_exchange(df_market, currency_code )
-
-            graph_big_mac_ex = plot_big_mac(df_big_mac,"dollar_ex", country)
-            graph_big_mac = plot_big_mac(df_big_mac,"dollar_price", country)
+            graph_big_mac_ex = plot.plot_big_mac(df_big_mac,"dollar_ex", country)
+            graph_big_mac = plot.plot_big_mac(df_big_mac,"dollar_price", country)
 
         else:
 
-            add_trace_exchange(df_market,currency_code, graph_exchange )
-            add_trace_big_mac(df_big_mac,"dollar_ex", country, graph_big_mac_ex)
-            add_trace_big_mac(df_big_mac,"dollar_price", country, graph_big_mac)
+            plot.add_trace_exchange(df_market_mapping,currency_code, graph_exchange )
+            plot.add_trace_big_mac(df_big_mac,"dollar_ex", country, graph_big_mac_ex)
+            plot.add_trace_big_mac(df_big_mac,"dollar_price", country, graph_big_mac)
     
 
 ### Update layout
 
-    update_layout(graph_exchange,
+    plot.update_layout(graph_exchange,
         "Implicit exhange rate", "time",
         "% Variation", "Currency code")
 
-    update_layout(graph_big_mac,
+    plot.update_layout(graph_big_mac,
             "USD to buy a Big Mac", "time",
             "USD Price","Country")
 
-    update_layout(graph_big_mac_ex,
+    plot.update_layout(graph_big_mac_ex,
             "Historical exhange rate", "time",
             "Exchange rate", "Currency code")
 
