@@ -7,7 +7,8 @@ import streamlit as st
 import plotly.express as px
 import plotly.graph_objects as go
 
-
+from about import message_users
+from utils.visuals import Visuals
 from utils.data_reader import (
     DataReader,
     df_big_mac,
@@ -15,8 +16,7 @@ from utils.data_reader import (
     df_country,
     df_market_mapping,
 )
-from utils.visuals import Visuals
-from about import message_users
+
 
 st.title("Inflation detective :sleuth_or_spy:")
 
