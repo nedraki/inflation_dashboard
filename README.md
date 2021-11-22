@@ -22,15 +22,12 @@ Additionally, the Big-Mac Index is studied by exploring the dataset published by
 
 ### TO DO:
 
-- organize repo 
+- Organize better the repo 
 -All the countries on btc are not available on big mac
-- Index related to EU zone have different names on each datasets
-- Global map of btc volume could be better presented
-- Global map of % implicit exchange could be more helpful
+- Index related to EU zone have different names on each dataset
 - Data of minimum wage by country and comparison against big mac could be good for comparisons,
 example "the m.salary in Venezuela affords 0.25 big mac per month"
-- sidebar on streamlit ?
-- refactor to OOP
-- deploy online
 - Can I get an index to quantify how much does rely a country on foreign exports ?
+- Can I get an index to quantify US inflation by looking at the behavior of all the countries relying on USD for their economy?
+
 
