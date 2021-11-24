@@ -97,22 +97,23 @@ class DataReader:
 
         """Get the n largest value for a given column on df_market_mapping"""
 
-        top_variations = df_market_mapping[["country", f"{columns}"]].nlargest(
-            n=number, columns=columns
-        )
-        top_variations = top_variations.drop_duplicates(subset="country")
+        top_variations = df_market_mapping.groupby("country").mean()
+        top_variations.reset_index(inplace=True)
+        top_variations = top_variations[["country", f"{columns}"]].nlargest(
+            n=number, columns=columns)
+
         top_variations.set_index("country", inplace=True)
 
         return top_variations
 
     def lowest_variation_value(self, number, columns, df=df_market_mapping):
         """Get the countries with highest appreciation on exchang relative to USD"""
-
-        top_variations = df_market_mapping[["country", f"{columns}"]].mean()
-        top_variations = df_market_mapping[["country", f"{columns}"]].nsmallest(
+        ## This func and the previous can be refactored in one
+        top_variations = df_market_mapping.groupby("country").mean()
+        top_variations.reset_index(inplace=True)
+        top_variations = top_variations[["country", f"{columns}"]].nsmallest(
             n=number, columns=columns
         )
-        top_variations = top_variations.drop_duplicates(subset="country")
         top_variations.set_index("country", inplace=True)
 
         return top_variations

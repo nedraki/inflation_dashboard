@@ -95,14 +95,14 @@ elif len(country_selection) == 0 and bitcoin_market == []:
         f"Countries with highest increase in exchange rate")
 
     st.error("Sell-off pressure on currencies")
-    top_variation_pct = read.top_variation_value(20, "pct")
+    top_variation_pct = read.top_variation_value(10, "pct")
     st.table(top_variation_pct)
 
     st.subheader(
         f"Countries with lowest variations on exchange rate")
 
     st.info("Currencies winning appreciation relative to the USD")
-    lowest_variation_pct = read.lowest_variation_value(20, "pct")
+    lowest_variation_pct = read.lowest_variation_value(10, "pct")
     st.table(lowest_variation_pct)
 
 try:
