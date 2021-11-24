@@ -108,6 +108,7 @@ class DataReader:
     def lowest_variation_value(self, number, columns, df=df_market_mapping):
         """Get the countries with highest appreciation on exchang relative to USD"""
 
+        top_variations = df_market_mapping[["country", f"{columns}"]].mean()
         top_variations = df_market_mapping[["country", f"{columns}"]].nsmallest(
             n=number, columns=columns
         )
@@ -153,7 +154,7 @@ class DataReader:
                 \n\
                 - The {currency_code} has been appreciated in average {abs(round(self.average,2))}%\
                 \n\
-                - Max appreciation: {round(self.max,2)}%"
+                - Max appreciation: {abs(round(self.min,2))}%"
                 ,
                 "appreciation",
             )
