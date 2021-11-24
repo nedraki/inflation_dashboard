@@ -82,8 +82,13 @@ elif len(country_selection) == 0 and bitcoin_market == []:
 
     st.info("Percentual variation on exchange rate by country")
     st.write(world_map_inflation)
+    st.write(
+        "The variation on exchange rate allows us to identify hotspots where citizens are selling off the local currency in exchange for other currencies perceived as stronger. Events with a significant increase in the exchange rate could be an indicator of devaluations or distrust on the currency"
+    )
 
-    st.info("Countries with highest variation on exchange rate:")
+    st.info(
+        f"Countries with highest variation on exchange rate during last {read.days_counter()} days:"
+    )
     top_variation_pct = read.top_variation_value(10, "pct")
     st.table(top_variation_pct)
 
