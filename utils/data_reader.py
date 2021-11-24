@@ -40,8 +40,8 @@ df_filtered = df_market_mapping[df_market_mapping.country == "Venezuela"]
 # df_filtered["implicit_exchange"] = df_filtered['avg_1h'].divide(df_filtered["avg_24h_usd"], fill_value = None)
 df_filtered = df_filtered[df_filtered.implicit_exchange > 100]
 index_to_drop = df_filtered.index.tolist()
-df_filtered_final = df_market_mapping.drop(index=index_to_drop, inplace=True)
-
+df_filtered_final = df_market_mapping.drop(index=index_to_drop)
+df_market_mapping = df_filtered_final
 ##############################
 
 
@@ -128,18 +128,21 @@ class DataReader:
 
         if self.average > 0:
             return (
-                (
-                    f" The {currency_code} has been devalued in \
-                            average by {round(self.average,2)}% in the last {delta} days"
-                ),
+                f"Relative to the USD, during the last {delta} days:\n\
+                \n\
+                -The {currency_code} has experimented a max devaluation of {round(self.max,2)}%\
+                \n\
+                -Average devaluation: {round(self.average,2)}%",
                 "devaluation",
             )
         else:
             return (
-                (
-                    f"{currency_code} has been appreciated by\
-                {abs(round(self.average,2))}% relative to the USD in the last {delta} days"
-                ),
+                f"Relative to the USD, during the last {delta} days:\n\
+                \n\
+                - The {currency_code} has been appreciated in average {abs(round(self.average,2))}%\
+                \n\
+                - Max appreciation: {round(self.max,2)}%"
+                ,
                 "appreciation",
             )
 

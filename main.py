@@ -82,14 +82,19 @@ elif len(country_selection) == 0 and bitcoin_market == []:
 
     st.info("Percentual variation on exchange rate by country")
     st.write(world_map_inflation)
-    st.write(
-        "The variation on exchange rate allows us to identify hotspots where citizens are selling off the local currency in exchange for other currencies perceived as stronger. Events with a significant increase in the exchange rate could be an indicator of devaluations or distrust on the currency"
+    st.info(
+        "The variation on exchange rate allows us to identify hotspots where citizens\
+        are selling off the local currency\
+        in exchange for other currencies perceived as stronger.\
+        Events with a significant increase in the exchange rate\
+        could be an indicator of devaluations or\
+        distrust on the currency."
     )
 
-    st.info(
-        f"Countries with highest variation on exchange rate during last {read.days_counter()} days:"
+    st.write(
+        f"Countries with highest increase on exchange rate during last {read.days_counter()} days:"
     )
-    top_variation_pct = read.top_variation_value(10, "pct")
+    top_variation_pct = read.top_variation_value(20, "pct")
     st.table(top_variation_pct)
 
 try:
@@ -99,10 +104,13 @@ try:
     for index, country in enumerate(country_selection):
 
         currency_code = plot.map_country(df_country, country)
+
         last_exchange_rate, pct_delta, metric_volume_btc, last_update = read.metrics(
             df_market_mapping, currency_code
         )
+
         dollar_big_mac, date = read.big_mac_exchange_rate(country)
+
         complementary_metrics.append(
             read.write_summary_metrics(df_market_mapping, currency_code)
         )
