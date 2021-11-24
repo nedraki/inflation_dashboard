@@ -80,7 +80,7 @@ elif len(country_selection) == 0 and bitcoin_market == []:
         df_market_mapping[["country", "currency_code", "pct"]]
     )
 
-    st.info("Percentual variation on exchange rate by country")
+    st.subheader("Percentual variation on exchange rate by country")
     st.write(world_map_inflation)
     st.info(
         "The variation on exchange rate allows us to identify hotspots where citizens\
@@ -91,11 +91,19 @@ elif len(country_selection) == 0 and bitcoin_market == []:
         distrust on the currency."
     )
 
-    st.write(
-        f"Countries with highest increase on exchange rate during last {read.days_counter()} days:"
-    )
+    st.subheader(
+        f"Countries with highest increase in exchange rate")
+
+    st.error("Sell-off pressure on currencies")
     top_variation_pct = read.top_variation_value(20, "pct")
     st.table(top_variation_pct)
+
+    st.subheader(
+        f"Countries with lowest variations on exchange rate")
+
+    st.info("Currencies winning appreciation relative to the USD")
+    lowest_variation_pct = read.lowest_variation_value(20, "pct")
+    st.table(lowest_variation_pct)
 
 try:
 

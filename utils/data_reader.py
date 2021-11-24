@@ -105,6 +105,18 @@ class DataReader:
 
         return top_variations
 
+    def lowest_variation_value(self, number, columns, df=df_market_mapping):
+        """Get the countries with highest appreciation on exchang relative to USD"""
+
+        top_variations = df_market_mapping[["country", f"{columns}"]].nsmallest(
+            n=number, columns=columns
+        )
+        top_variations = top_variations.drop_duplicates(subset="country")
+        top_variations.set_index("country", inplace=True)
+
+        return top_variations
+
+
     def summary_metrics(self, df, currency_code):
 
         df = df[df["currency_code"] == currency_code]
