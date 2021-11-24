@@ -84,8 +84,7 @@ elif len(country_selection) == 0 and bitcoin_market == []:
     st.write(world_map_inflation)
     st.info(
         "The variation on exchange rate allows us to identify hotspots where citizens\
-        are selling off the local currency\
-        in exchange for other currencies perceived as stronger.\
+        are selling off the local currency.\
         Events with a significant increase in the exchange rate\
         could be an indicator of devaluations or\
         distrust on the currency."
