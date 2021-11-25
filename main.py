@@ -159,7 +159,7 @@ try:
 
     plot.update_layout(
         graph_big_mac_ex,
-        "Historical exhange rate",
+        "Historical exhange rate - Dollar Big Mac",
         "time",
         "Exchange rate",
         "Currency code",
