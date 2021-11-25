@@ -77,7 +77,7 @@ elif bitcoin_market == ["Global trade"]:
 elif len(country_selection) == 0 and bitcoin_market == []:
 
     world_map_inflation = plot.world_map(
-        df_market_mapping[["country", "currency_code", "pct"]]
+        df_market_mapping[["country", "currency_code", "pct"]], average=True
     )
 
     st.subheader("Percentual variation on exchange rate by country")
