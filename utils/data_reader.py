@@ -100,7 +100,8 @@ class DataReader:
         top_variations = df_market_mapping.groupby("country").mean()
         top_variations.reset_index(inplace=True)
         top_variations = top_variations[["country", f"{columns}"]].nlargest(
-            n=number, columns=columns)
+            n=number, columns=columns
+        )
 
         top_variations.set_index("country", inplace=True)
 
@@ -117,7 +118,6 @@ class DataReader:
         top_variations.set_index("country", inplace=True)
 
         return top_variations
-
 
     def summary_metrics(self, df, currency_code):
 
@@ -155,8 +155,7 @@ class DataReader:
                 \n\
                 - The {currency_code} has been appreciated in average {abs(round(self.average,2))}%\
                 \n\
-                - Max appreciation: {abs(round(self.min,2))}%"
-                ,
+                - Max appreciation: {abs(round(self.min,2))}%",
                 "appreciation",
             )
 
