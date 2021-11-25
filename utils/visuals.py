@@ -139,8 +139,8 @@ class Visuals:
             locationmode="country names",
             size="pct",
             color="pct",
-            projection="natural earth",
-            title="% Variation of foreign exchange rate"
+            projection="natural earth"
+            # title="% Variation of foreign exchange rate"
             #                      animation_frame= df['date'].dt.isocalendar().week
         )
 
