@@ -23,10 +23,6 @@ st.title("Inflation detective :sleuth_or_spy:")
 plot = Visuals()
 read = DataReader()
 
-# Sidebar message:
-st.sidebar.write(
-    "An effort to track real variance on the exchange rate of currencies relative to the USD"
-)
 
 ### Selection of countries for line plot of exchange rate:
 
@@ -38,7 +34,10 @@ bitcoin_market = st.sidebar.multiselect(
     "Trading of currencies for Bitcoins", options=["Global trade"]
 )
 
-
+# Sidebar message:
+st.sidebar.write(
+    "An effort to track real variance on the exchange rate of currencies relative to the USD."
+)
 download_data = st.sidebar.button("Download the data")
 message = st.sidebar.button("About the project")
 
