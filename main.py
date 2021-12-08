@@ -35,7 +35,7 @@ bitcoin_market = st.sidebar.multiselect(
 
 # Sidebar message:
 st.sidebar.write(
-    "An effort to track real variance on the exchange rate of currencies against the USD"
+    "An effort to track real variance on the exchange rate of currencies relative to the USD"
 )
 download_data = st.sidebar.button("Download the data")
 message = st.sidebar.button("About the project")
@@ -65,7 +65,7 @@ elif bitcoin_market == ["Global trade"]:
         st.write(plot.geo_scatter(world_map_volume_btc))
 
         ## Biggest traders by country:
-        top_variation_volume = read.top_variation_value(50, "volume_btc")
+        top_variation_volume = read.top_variation_value(10, "volume_btc")
 
         st.info("Countries moving highest volume on a day:")
         st.table(top_variation_volume)
