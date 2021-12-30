@@ -99,6 +99,9 @@ class DataReader:
 
         top_variations = df_market_mapping.groupby("country").mean()
         top_variations.reset_index(inplace=True)
+        #Filter by volume of transactions volume_btc >=0.02:
+        top_variations = top_variations.loc[(top_variations.volume_btc >=0.02)]
+
         top_variations = top_variations[["country", f"{columns}"]].nlargest(
             n=number, columns=columns
         )

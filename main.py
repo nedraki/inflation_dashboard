@@ -78,7 +78,7 @@ elif bitcoin_market == ["Global trade"]:
 elif len(country_selection) == 0 and bitcoin_market == []:
 
     world_map_inflation = plot.world_map(
-        df_market_mapping[["country", "currency_code", "pct"]], average=True
+        df_market_mapping[["country", "currency_code", "pct","volume_btc"]], average=True
     )
 
     st.subheader("Percentual variation on exchange rate by country")
@@ -94,7 +94,7 @@ elif len(country_selection) == 0 and bitcoin_market == []:
     st.subheader(f"Countries with highest increase in exchange rate")
 
     st.error("Sell-off pressure on currencies")
-    top_variation_pct = read.top_variation_value(10, "pct")
+    top_variation_pct = read.top_variation_value(10, "pct","volume_btc")
     st.table(top_variation_pct)
 
     st.subheader(f"Countries with lowest variations on exchange rate")

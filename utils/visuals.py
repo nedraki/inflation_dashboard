@@ -127,11 +127,15 @@ class Visuals:
     @st.cache()
     def world_map(self, df, average=False):
 
+        """World map representing bubbles on countries/currencies
+        facing sell-off presure"""
+
         if average == False:
             df = df.loc[df.pct > 0]
         else:
+            # Selecting countries with transactions > 0.02 BTC
             df = df.groupby(["country", "currency_code"]).mean().reset_index()
-            df = df.loc[df.pct > 0]
+            df = df.loc[(df.pct > 0)&(df.volume_btc >=0.02)]
 
         fig = px.scatter_geo(
             df,
