@@ -48,6 +48,8 @@ df_market_mapping = df_filtered_final
 class DataReader:
     def __init__(self):
         "Data Reader"
+        ## Minimum volume to consider significant contribution to stats:
+        self.btc_limit = 0.02
 
     ### Functions for reading key metrics:
 
@@ -99,8 +101,8 @@ class DataReader:
 
         top_variations = df_market_mapping.groupby("country").mean()
         top_variations.reset_index(inplace=True)
-        #Filter by volume of transactions volume_btc >=0.02:
-        top_variations = top_variations.loc[(top_variations.volume_btc >=0.02)]
+        #Filter by volume of transactions volume_btc >=self.btc_limit:
+        top_variations = top_variations.loc[(top_variations.volume_btc >=self.btc_limit)]
 
         top_variations = top_variations[["country", f"{columns}"]].nlargest(
             n=number, columns=columns

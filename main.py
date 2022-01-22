@@ -60,7 +60,7 @@ if download_data:
 elif bitcoin_market == ["Global trade"]:
 
     try:
-        st.info("Tracking volume of BTC traded globally")
+        st.info("Average volume of BTC traded by country")
 
         world_map_volume_btc = df_market_mapping[["country", "volume_btc"]]
         st.write(plot.geo_scatter(world_map_volume_btc))
@@ -68,7 +68,7 @@ elif bitcoin_market == ["Global trade"]:
         ## Biggest traders by country:
         top_variation_volume = read.top_variation_value(10, "volume_btc")
 
-        st.info("Countries moving highest volume on a day:")
+        st.info("Countries moving highest average volume of BTC")
         st.table(top_variation_volume)
 
     except:

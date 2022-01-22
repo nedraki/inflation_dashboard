@@ -9,8 +9,8 @@ class Visuals:
     "Class with the main functions to visualize metrics of currencie's exchange"
 
     def __init__(self):
-
         "Init the class"
+        self.btc_limit = 0.02
 
     def map_country(self, df, country):
         # Mapping country with currency code
@@ -109,7 +109,11 @@ class Visuals:
     @st.cache()
     def geo_scatter(self, df):
 
+        """World map to represent volume of BTC traded"""
+
         df = df[["country", "volume_btc"]]
+        ### Calculating average volume traded
+        df = df.groupby(["country"]).mean().reset_index()
 
         fig = px.scatter_geo(
             df,
@@ -133,9 +137,9 @@ class Visuals:
         if average == False:
             df = df.loc[df.pct > 0]
         else:
-            # Selecting countries with transactions > 0.02 BTC
+            # Selecting countries with transactions > self.btc_limit BTC
             df = df.groupby(["country", "currency_code"]).mean().reset_index()
-            df = df.loc[(df.pct > 0)&(df.volume_btc >=0.02)]
+            df = df.loc[(df.pct > 0)&(df.volume_btc >=self.btc_limit)]
 
         fig = px.scatter_geo(
             df,
