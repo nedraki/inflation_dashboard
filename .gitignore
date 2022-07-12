@@ -6,6 +6,13 @@
 .vscode/
 # Ignore all daily data on csv files
 data/csv/*
+data/parquet/*
+data/analytics/*
+
+# Ignore file extensions
+*.db
+*.csv
+*.parquet
 
 # Pycache
 *_pycache__
