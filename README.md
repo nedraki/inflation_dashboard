@@ -2,8 +2,8 @@
 
 Data experiment to track real inflation rates in countries where statistics are unreliable or no official data is published. The objective is to measure the exchange rate of a given fiat currency against a cripto-currency and calculate the implicit exchange rate relative to the USD. The objective is to measure the country's inflation under the assumption that a ***constant increase on the exchange rate is an early indicator of inflation***, this is specially true for the countries that heavily rely on foreign exports. 
 
-Similar strategies have been followed by the [Troubled currencies](https://sites.krieger.jhu.edu/iae/research-programs/troubled-currencies-project/) project at Johns Hopkins University.
-
+Similar strategies have been followed by the [Troubled currencies](https://sites.krieger.jhu.edu/iae/research-programs/troubled-currencies-project/) project at Johns Hopkins University. However, tracking the exchange rate through monitoring of criptocurrency <-> fiat transactions, opens up the posibility of live time updates and on-chain verification of data, meaning that no-central institution can alter the numbers and records are publicly available. This ideas are brilliantly explained on the essay [A $100k Prize for a Decentralized Inflation Dashboard](https://thenetworkstate.com/inflation) written by @balajis
+ 
 Additionally, the Big-Mac Index is studied by exploring the dataset published by The Economist.
 
 ## Methodology
@@ -18,6 +18,10 @@ Additionally, the Big-Mac Index is studied by exploring the dataset published by
 - Exchange rates are obtained from daily transactions on localbitcoins.com
 - [Mapping of country currency code](https://gist.github.com/marcusbaguley/304261)
 - [The Economist Big Mac Index](link)
+
+:warning: **The project is deprecated**. Localbitcoins.com was a reliable source of transactions BTC <-> Local Currency (FIAT), an open & free market where individuals where able to trade at the agreed price without governmental restrictions. Unfortunately,localbitcoins.com announced the cessation of its commercial operations and with it the monitoring of transactions via their API became unfeasible.
+
+📈 **An alternative inflation dashboard**  [can be found on the following link](https://public.tableau.com/app/profile/prof.steve.h.hanke/viz/HankesInflationSatellite/HankesInflationSatellite), The data and estimates are updated on a regular basis and can be followed regularly via Prof. Hanke’s Twitter account. [Troubled currencies](https://sites.krieger.jhu.edu/iae/research-programs/troubled-currencies-project/) project at Johns Hopkins University.
 
 
 ### TO DO:
